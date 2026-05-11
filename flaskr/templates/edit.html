@@ -1,0 +1,62 @@
+<!-- edit.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="stylesheet"href="{{ url_for('static', filename='signin.css') }}">
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+</head>
+<body>
+<section class="header">
+    <form class="container" method="post">
+            <h1>プロフィール変更</h1>
+
+            <div class="form-group is-error1 is-error2">
+                <label class="form-group-label" for="input-user-id">
+                    <span class="form-group-label-item">変更後ユーザーID</span><span class="form-group-required">(必須)</span>
+                </label>
+                 
+                <input class="form-group-input" type="text" id="input-user-id" name="user_id" placeholder="example@example.com" value="{{ new_user_id or user.user_id }}">      
+                {% for error in error_user_id %}
+                    <p class="error-text1">{{ error }}</p>
+                {% endfor %}
+            </div>  
+
+            <div class="form-group is-error1 is-error2 is-required">
+                <label class="form-group-label" for="input-username">
+                    <span class="form-group-label-item">変更後ユーザーネーム</span><span class="form-group-required">(必須)</span>
+                </label>
+                 
+                <input class="form-group-input" type="text" id="input-username" name="username" required placeholder="かばやきさんたろう" value="{{ new_username or user.username }}">      
+                {% for error in error_username %}
+                    <p class="error-text1">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form-group is-error1 is-error2">
+                <label class="form-group-label" for="input-favorite-food">
+                    <span class="form-group-label-item">変更後好きな食べ物</span><span class="form-group-required">(必須)</span>
+                </label>
+                 
+                <input class="form-group-input" type="text" id="input-favorite-food" name="favorite_food" placeholder="あんかけチャーハン" value="{{ new_favorite_food or user.favorite_food }}">      
+                {% for error in error_favorite_food %}
+                    <p class="error-text1">{{ error }}</p>
+                {% endfor %}
+            </div>  
+
+            <div class="form-group is-error1 is-error2">
+                <label class="form-group-label" for="input-hobby">
+                    <span class="form-group-label-item">変更後趣味</span><span class="form-group-required">(必須)</span>
+                </label>
+                 
+                <input class="form-group-input" type="text" id="input-hobby" name="hobby" placeholder="読書" value="{{ new_hobby or user.hobby }}">      
+                {% for error in error_hobby %}
+                    <p class="error-text1">{{ error }}</p>
+                {% endfor %}
+               
+            </div>
+            <button class="submit-button" type="submit"><span class="button-text">プロフィールを更新</span></button> 
+    </form>
+   </section>
+</body>
+</html>
