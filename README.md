@@ -8,6 +8,8 @@ To recreate the tactile and emotional experience of sending/receiving traditiona
 Current Status (May 11 2026):
 
 Currently developing the core functions for sending, receiving, and storing messages using SQLite.
+Intermediate Goal:
+To develop a dedicated API system for an original physical device. This device will function as a dedicated receiver, physicalizing the digital "letter" experience.
 
 Database schema design for message tracking is in progress.
 ----
