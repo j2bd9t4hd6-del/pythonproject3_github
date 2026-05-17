@@ -10,7 +10,10 @@
     {% for chara, line in scenario %}
         <p>{{ chara }}: {{ line }}</p>
     {% endfor %}
+    <p>住所：{{ current_user.address }}</p>
     <a href="{{ url_for('auth.logout') }}">ログアウト</a>
     <a href="{{ url_for('user.edit') }}">プロフィール編集</a>
+    <a href="{{ url_for('message.send_message') }}">メッセージ送信</a>
+    <a href="{{ url_for('message.inbox') }}">受信箱</a>
 </body>
 </html>

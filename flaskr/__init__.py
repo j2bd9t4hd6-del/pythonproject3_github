@@ -25,9 +25,9 @@ def create_app(test_config=None):
         from flaskr.db import get_db
         db_con = get_db()
         
-        # 1. SQLに user_id, hobby, favorite_food を追加する
+        # 1. SQLに user_id, hobby, favorite_food, address を追加する
         user_data = db_con.execute(
-            'SELECT id, username, email, password, user_id, hobby, favorite_food FROM users WHERE id = ?', 
+            'SELECT id, username, email, password, user_id, hobby, favorite_food, address FROM users WHERE id = ?', 
             (pk_id,)
         ).fetchone()
         
@@ -42,7 +42,8 @@ def create_app(test_config=None):
             username=user_data['username'],
             user_id=user_data['user_id'],      # ← これが必須！
             hobby=user_data['hobby'],          # ついでに追加
-            favorite_food=user_data['favorite_food'] # ついでに追加
+            favorite_food=user_data['favorite_food'], # ついでに追加
+            address=user_data['address']       # ついでに追加
         )
         return user
     
@@ -52,8 +53,10 @@ def create_app(test_config=None):
     from . import main 
     from . import auth
     from . import user
+    from . import message # 追加
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
-    
+    app.register_blueprint(message.bp)
+
     return app

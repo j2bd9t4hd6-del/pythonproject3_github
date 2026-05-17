@@ -1,0 +1,25 @@
+<!--inbox.html-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inbox</title>
+</head>
+<body>
+    <h1>Inbox</h1>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>
+                    <strong>From:</strong> {{ message.sender_address }}<br>
+                    <strong>Message:</strong> {{ message.body }}<br>
+                    <!--{# <form action="{{ url_for('message.mark_as_delivered', message_id=message.id) }}" method="post">
+                        <button type="submit">Mark as Delivered</button>
+                    </form>#} -->
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No new messages.</p>
+    {% endif %}
+</body>
+</html>

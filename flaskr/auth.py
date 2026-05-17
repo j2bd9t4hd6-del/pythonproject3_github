@@ -1,4 +1,6 @@
 # auth.py
+import random
+import string
 import secrets
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash, session, g
@@ -19,6 +21,29 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM users WHERE id = ?', (user_id,)
         ).fetchone()
+
+
+
+def generate_unique_address():
+    db = get_db()
+    
+    # 1. 素材の定義
+    hiragana_all = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん"
+    iroha_sub = "いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす" # 「い〜す」まで
+    
+    while True:
+        # 2. フォーマットに合わせてランダム生成
+        part1 = "".join(random.choices(hiragana_all, k=2))  # 平仮名ランダム2文字
+        part2 = random.choice(iroha_sub)                    # いろは順の1文字
+        part3 = random.randint(0, 9)                        # 数字1つ (0〜9)
+        
+        address = f"{part1}-{part2}-{part3}"
+        
+        # 3. 重複チェック（DBに既に同じ住所がないか）
+        exist = db.execute('SELECT id FROM users WHERE address = ?', (address,)).fetchone()
+        
+        if not exist:
+            return address  # 被りがなければこの住所に決定！
 
 #サインアップ
 @bp.route("/signup", methods=['POST', 'GET'])
@@ -113,6 +138,9 @@ def signup():
 
         #好きな食べ物がちゃんと食べ物であるか確認(後ほど実装予定)
 
+        #住所は自動生成
+        address = generate_unique_address()
+
         #エラーがない場合はユーザーを新規登録してログインする
         if not any([error_email, error_password, error_username, error_user_id, error_hobby, error_favorite_food]):
             hashed_password = generate_password_hash(password)
@@ -120,9 +148,9 @@ def signup():
             #データをインサートして新規登録する
             db.execute(
                 """INSERT INTO users
-                (email, user_id, password, username, hobby, favorite_food)
-                VALUES (?, ?, ?, ?, ?, ?)""",
-                (email, user_id, hashed_password, username, hobby, favorite_food)
+                (email, user_id, password, username, hobby, favorite_food, address)
+                VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (email, user_id, hashed_password, username, hobby, favorite_food, address)
             )
             db.commit()
 
@@ -137,7 +165,8 @@ def signup():
                 username=user_row['username'],
                 user_id=user_row['user_id'],
                 hobby=user_row['hobby'],
-                favorite_food=user_row['favorite_food']
+                favorite_food=user_row['favorite_food'],
+                address=user_row['address']
             )
 
             #セッションを確立（login_userはflaskの関数）
@@ -261,7 +290,9 @@ def login():
                 username=user_row['username'],
                 user_id=user_row['user_id'],
                 hobby=user_row['hobby'],
-                favorite_food=user_row['favorite_food']
+                favorite_food=user_row['favorite_food'],
+                address=user_row['address']
+
             )
             #セッションを確立（login_userはflaskの関数）
             login_user(user_object)

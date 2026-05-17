@@ -1,0 +1,21 @@
+<!-- send_message.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Message</title>
+</head>
+<body>
+    <h2>Send Message</h2>
+    <form method="POST" action="{{ url_for('message.send_message') }}">
+        <div>
+            <label for="recipient_address">Recipient Address:</label>
+            <input type="text" id="recipient_address" name="recipient_address" required>
+    </div>
+    <div>
+        <label for="body">Message:</label>
+        <textarea id="body" name="body" required></textarea>
+    </div>
+    <button type="submit">Send</button>
+</form>
+</body>
+</html>
