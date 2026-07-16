@@ -7,14 +7,27 @@
 <body>
     <h2>Send Message</h2>
     <form method="POST" action="{{ url_for('message.send_message') }}">
-        <div>
-            <label for="recipient_address">Recipient Address:</label>
-            <input type="text" id="recipient_address" name="recipient_address" required>
+    <div>
+        <label for="recipient_address">Recipient Address:</label>
+        <input type="text" id="recipient_address" name="recipient_address" required>
+    </div>
+    <div>
+        <label for="recipient_name">Recipient Name:</label>
+        <input type="text" id="recipient_name" name="recipient_name">
     </div>
     <div>
         <label for="body">Message:</label>
-        <textarea id="body" name="body" required></textarea>
+        <textarea id="body" name="body"></textarea>
     </div>
+    <div>
+        <label for="sender_address">Sender Address:</label>
+        <input type="text" id="sender_address" name="sender_address">
+    </div>
+    <div>
+        <label for="sender_name">Sender Name:</label>
+        <input type="text" id="sender_name" name="sender_name">
+    </div>
+   
     <button type="submit">Send</button>
 </form>
 </body>
