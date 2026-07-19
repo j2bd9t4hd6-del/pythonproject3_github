@@ -11,7 +11,10 @@
             {% for message in messages %}
                 <li>
                     <strong>From:</strong> {{ message.sender_address }}<br>
+                    <strong>Sender Name:</strong> {{ message.sender_name }}<br>
                     <strong>Message:</strong> {{ message.body }}<br>
+                    <strong>Recipient:</strong> {{ message.recipient_address }}<br>
+                    <strong>Recipient Name:</strong> {{ message.recipient_name }}<br>
                     <!--{# <form action="{{ url_for('message.mark_as_delivered', message_id=message.id) }}" method="post">
                         <button type="submit">Mark as Delivered</button>
                     </form>#} -->
@@ -21,5 +24,10 @@
     {% else %}
         <p>No new messages.</p>
     {% endif %}
+
+    <form action="{{ url_for('message.mark_as_read') }}" method="post">
+        <button type="submit">手紙をうけとる</button>
+    </form>
+    <a href="{{ url_for('main.mypage') }}">マイページに戻る</a>
 </body>
 </html>
