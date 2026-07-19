@@ -65,3 +65,13 @@ def archive():
     user_address = current_user.address
     messages = db.execute('SELECT * FROM messages WHERE recipient_address = ? AND is_delivered = 1 ORDER BY id ASC', (user_address,)).fetchall()
     return render_template('archive.html', messages=messages)
+
+#保管した手紙を捨てるためのルート
+@bp.route('/delete_message', methods=['POST'])
+@login_required
+def delete_message():
+    db = get_db()
+    message_id = request.form.get('message_id')
+    db.execute('DELETE FROM messages WHERE id = ? AND recipient_address = ?', (message_id, current_user.address))
+    db.commit()
+    return redirect(url_for('message.archive'))

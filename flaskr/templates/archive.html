@@ -17,6 +17,10 @@
                 <strong>宛先住所:</strong> {{ message.recipient_address }}<br>
                 <strong>差出人住所:</strong> {{ message.sender_address }}<br>
                 <strong>受け取った日付:</strong> {{ message.receiving_timestamp }}<br>
+                <form method="post" action="{{ url_for('message.delete_message') }}">
+                    <input type="hidden" name="message_id" value="{{ message.id }}">
+                    <button type="submit">捨てる</button>
+                </form>
             </li>
             <br>
         {% else %}
