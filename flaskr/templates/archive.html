@@ -1,0 +1,26 @@
+<!-- archive.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>保管した手紙</title>
+</head>
+<body>
+    <h1>保管した手紙</h1>
+    <ul>
+        {% for message in messages %}
+            <li>
+                <strong>消印:</strong> {{ message.postmark_timestamp }}<br>
+                <strong>差出人:</strong> {{ message.sender_name }}<br>
+                <strong>宛名:</strong> {{ message.recipient_name }}<br>
+                <strong>本文:</strong> {{ message.body }}<br>
+                <strong>宛先住所:</strong> {{ message.recipient_address }}<br>
+                <strong>差出人住所:</strong> {{ message.sender_address }}<br>
+                <strong>受け取った日付:</strong> {{ message.receiving_timestamp }}<br>
+            </li>
+            <br>
+        {% else %}
+            <li>保管されたメッセージはありません。</li>
+        {% endfor %}
+        <a href="{{ url_for('main.mypage') }}">マイページに戻る</a>
+    </ul>

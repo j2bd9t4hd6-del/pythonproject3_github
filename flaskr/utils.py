@@ -2,8 +2,8 @@
 import random
 
 def get_scenario(user):
-    chara_A = "寧"
-    chara_B = "苛"
+    chara_A = "A"
+    chara_B = "B"
     b_id = [
             "パッとしない",
             "でたらめな",

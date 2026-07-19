@@ -51,7 +51,7 @@ def create_users_table():
 
 def create_messages_table():
     db = get_db()
-    db.execute('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT, sender_address TEXT, sender_name TEXT, recipient_address TEXT NOT NULL, recipient_name TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, is_delivered BOOLEAN DEFAULT 0)')
+    db.execute('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT, sender_address TEXT, sender_name TEXT, recipient_address TEXT NOT NULL, recipient_name TEXT, postmark_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, receiving_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, is_delivered BOOLEAN DEFAULT 0)')
     db.commit()
 
 def delete_users_db():

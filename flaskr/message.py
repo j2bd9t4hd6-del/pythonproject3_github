@@ -28,14 +28,14 @@ def send_message():
             if user is None:
                 return render_template('send_message.html', error="Recipient address does not exist.")
             
-        # メッセージ送信ロジックをここに実装
+        # メッセージ郵送ロジックをここに実装
         db.execute("""INSERT INTO messages
                     (body, sender_address, sender_name, recipient_address, recipient_name)
                     VALUES (?, ?, ?, ?, ?)""",
                     (body, sender_address, sender_name, recipient_address, recipient_name)
                     )
         db.commit()
-        return 'Message sent successfully'
+        return render_template('send_message.html', success="Message sent successfully!")
     else:
         return render_template('send_message.html')
 
@@ -53,6 +53,15 @@ def inbox():
 @login_required
 def mark_as_read():
     db = get_db()
-    db.execute('UPDATE messages SET is_delivered = 1 WHERE recipient_address = ? AND is_delivered = 0', (current_user.address,))
+    db.execute('UPDATE messages SET is_delivered = 1, receiving_timestamp = CURRENT_TIMESTAMP WHERE recipient_address = ? AND is_delivered = 0', (current_user.address,))
     db.commit()
     return redirect(url_for('message.inbox'))
+
+#保管したメッセージを表示するためのルート
+@bp.route('/archive')
+@login_required
+def archive():
+    db = get_db()
+    user_address = current_user.address
+    messages = db.execute('SELECT * FROM messages WHERE recipient_address = ? AND is_delivered = 1 ORDER BY id ASC', (user_address,)).fetchall()
+    return render_template('archive.html', messages=messages)
