@@ -23,7 +23,7 @@ def send_message():
         if not recipient_address:
             return render_template('send_message.html', error="Recipient address is required.")
         else:
-            #recipient_addressがDBに存在するか確認
+            #recipient_addressがDBに存在するか確認(存在しなければ何もしない)
             user = db.execute('SELECT * FROM users WHERE address = ?', (recipient_address,)).fetchone()
             if user is None:
                 return render_template('send_message.html', error="Recipient address does not exist.")

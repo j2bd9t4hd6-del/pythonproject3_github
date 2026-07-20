@@ -2,19 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inbox</title>
+    <title>ポスト</title>
 </head>
 <body>
-    <h1>Inbox</h1>
+    <h1>ポスト</h1>
     {% if messages %}
         <ul>
             {% for message in messages %}
                 <li>
-                    <strong>From:</strong> {{ message.sender_address }}<br>
-                    <strong>Sender Name:</strong> {{ message.sender_name }}<br>
-                    <strong>Message:</strong> {{ message.body }}<br>
-                    <strong>Recipient:</strong> {{ message.recipient_address }}<br>
-                    <strong>Recipient Name:</strong> {{ message.recipient_name }}<br>
+                    <strong>消印:</strong> {{ message.postmark_timestamp }}<br>
+                    <strong>差出人:</strong> {{ message.sender_name }}<br>
+                    <strong>宛名:</strong> {{ message.recipient_name }}<br>
+                    <strong>本文:</strong> {{ message.body }}<br>
+                    <strong>宛先住所:</strong> {{ message.recipient_address }}<br>
+                    <strong>差出人住所:</strong> {{ message.sender_address }}<br>
                     <!--{# <form action="{{ url_for('message.mark_as_delivered', message_id=message.id) }}" method="post">
                         <button type="submit">Mark as Delivered</button>
                     </form>#} -->
@@ -22,7 +23,7 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>No new messages.</p>
+        <p>手紙は入っていません</p>
     {% endif %}
 
     <form action="{{ url_for('message.mark_as_read') }}" method="post">

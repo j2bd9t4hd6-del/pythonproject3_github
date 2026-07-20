@@ -2,33 +2,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Send Message</title>
+    <title>手紙を送る</title>
 </head>
 <body>
-    <h2>Send Message</h2>
+    <h2>手紙を送る</h2>
     <form method="POST" action="{{ url_for('message.send_message') }}">
     <div>
-        <label for="recipient_address">Recipient Address:</label>
+        <label for="recipient_address">宛先住所</label>
         <input type="text" id="recipient_address" name="recipient_address" required>
     </div>
     <div>
-        <label for="recipient_name">Recipient Name:</label>
+        <label for="recipient_name">宛名</label>
         <input type="text" id="recipient_name" name="recipient_name">
     </div>
     <div>
-        <label for="body">Message:</label>
+        <label for="body">本文</label>
         <textarea id="body" name="body"></textarea>
     </div>
     <div>
-        <label for="sender_address">Sender Address:</label>
+        <label for="sender_address">差出人住所</label>
         <input type="text" id="sender_address" name="sender_address">
     </div>
     <div>
-        <label for="sender_name">Sender Name:</label>
+        <label for="sender_name">差出人名</label>
         <input type="text" id="sender_name" name="sender_name">
     </div>
    
-    <button type="submit">Send</button>
+    <button type="submit">送る</button>
 </form>
 <a href="{{ url_for('main.mypage') }}">マイページに戻る</a>
 </body>
