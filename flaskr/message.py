@@ -3,7 +3,18 @@
 from flask import Blueprint, request, request, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from .db import get_db
+from datetime import datetime, timedelta
+import random
 bp = Blueprint('message', __name__, url_prefix='/message')
+
+def get_scheduled_time():
+    # 現在の時刻を取得
+    now = datetime.now()
+    target_day = now + timedelta(days=2)
+    #午前9時から午後5時の間に設定する
+    target_minute  = random.randint( 9 * 60, 17 * 60 )
+    scheduled_time = target_day.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(minutes=target_minute)
+    return scheduled_time.strftime('%Y-%m-%d %H:%M:%S')
 
 @bp.route('/send', methods=['POST', 'GET'])
 @login_required
@@ -29,10 +40,11 @@ def send_message():
                 return render_template('send_message.html', error="Recipient address does not exist.")
             
         # メッセージ郵送ロジックをここに実装
+        scheduled_time = get_scheduled_time()
         db.execute("""INSERT INTO messages
-                    (body, sender_address, sender_name, recipient_address, recipient_name)
-                    VALUES (?, ?, ?, ?, ?)""",
-                    (body, sender_address, sender_name, recipient_address, recipient_name)
+                    (body, sender_address, sender_name, recipient_address, recipient_name, scheduled_at)
+                    VALUES (?, ?, ?, ?, ?, ?)""",
+                    (body, sender_address, sender_name, recipient_address, recipient_name, scheduled_time)
                     )
         db.commit()
         return render_template('send_message.html', success="Message sent successfully!")
@@ -40,12 +52,14 @@ def send_message():
         return render_template('send_message.html')
 
 #未読のメッセージを取得して表示するためのルート
+#表示される手紙は、投函予定時刻をすぎてからのものとする
 @bp.route('/inbox')
 @login_required
 def inbox():
     db = get_db()
+    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     user_address = current_user.address
-    messages = db.execute('SELECT * FROM messages WHERE recipient_address = ? AND is_delivered = 0 ORDER BY id ASC', (user_address,)).fetchall()
+    messages = db.execute('SELECT * FROM messages WHERE recipient_address = ? AND is_delivered = 0 AND scheduled_at <= ? ORDER BY id ASC', (user_address, now)).fetchall()
     return render_template('inbox.html', messages=messages)
 
 #メッセージを既読にするためのルート

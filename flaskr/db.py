@@ -51,7 +51,7 @@ def create_users_table():
 
 def create_messages_table():
     db = get_db()
-    db.execute('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT, sender_address TEXT, sender_name TEXT, recipient_address TEXT NOT NULL, recipient_name TEXT, postmark_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, receiving_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, is_delivered BOOLEAN DEFAULT 0)')
+    db.execute('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, body TEXT, sender_address TEXT, sender_name TEXT, recipient_address TEXT NOT NULL, recipient_name TEXT, postmark_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, receiving_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, scheduled_at DATETIME NOT NULL, is_delivered BOOLEAN DEFAULT 0)')
     db.commit()
 
 def delete_users_db():
@@ -85,15 +85,19 @@ def insert_initial_users():
     db.commit()
 
 def insert_initial_messages():
+    from flaskr.message import get_scheduled_time
+    from datetime import datetime, timedelta
     db = get_db()
+    scheduled_time_1 = datetime.now() + timedelta(minutes=1)
+    scheduled_time_2 = datetime.now() + timedelta(minutes=1)
     db.execute("""INSERT INTO messages
-                (body, sender_address, recipient_address)
-                VALUES (?, ?, ?)""",
-                ('Hello, this is a test message.', 'あお-い-001', 'あお-い-002')
+                (body, sender_address, recipient_address, scheduled_at)
+                VALUES (?, ?, ?, ?)""",
+                ('Hello, this is a test message.', 'あお-い-001', 'あお-い-002', scheduled_time_1)
                 )
     db.execute("""INSERT INTO messages
-                (body, sender_address, recipient_address) 
-                VALUES (?, ?, ?)""",
-                ('Hi! This is another test message.', 'あお-い-002', 'あお-い-001')
+                (body, sender_address, recipient_address, scheduled_at) 
+                VALUES (?, ?, ?, ?)""",
+                ('Hi! This is another test message.', 'あお-い-002', 'あお-い-001', scheduled_time_2)
                 )
     db.commit()
